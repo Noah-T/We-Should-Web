@@ -62,16 +62,23 @@ function findActivities() {
 			$(".activityList").addClass("activitiesBackground");
 
 			$("li").click(function(){
+				var activityPath = myActivities[$(this).data("activityindex")];
 				if (myActivities[$(this).data("activityindex")].image !== undefined) {
 					var imagePath = myActivities[$(this).data("activityindex")].image.url();	
 				};
 				
 				$(".activityList").empty();
-				$(".activityList").append("<li class='activityInList'>"+myActivities[$(this).data("activityindex")].name+ "</li>")
+				$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
+				$(".activityList").append("<li id='activityTitle' class='activityInList'>"+myActivities[$(this).data("activityindex")].name+ "</li>")
 				if (imagePath !== undefined) {
-					$(".activityList").append("<img src='" + imagePath+"'> </img>");
+					$(".activityList").append("<img src='" + imagePath+"'class='activityImage'></img>");
 				};
-				$(".activityList").append("<button id='backButton'>Back</button>");
+				$(".activityList").append("<input type=text value='" + (activityPath.creator || "") +"'></input>");
+				$(".activityList").append("<input type=text value='" + (activityPath.link || "") +"'></input>");
+				$(".activityList").append("<input type=text value='" + (activityPath.location || "") +"'></input>");
+				$(".activityList").append("<input type=text value='" + (activityPath.phoneNumber || "")+"'></input>");
+				$(".activityList").append("<textarea value='" + (activityPath.description || "") +"'></textarea>");
+				
 				$("#backButton").click(function(){
 					findActivities();
 				});

@@ -7,6 +7,10 @@ html, body {
 h1 {
 	margin: 0;
 }
+
+#mainPageTitle {
+	color: white;
+}
 .formWrapper {
 	padding-top: 100px;
 	margin: 0 auto;
@@ -45,13 +49,34 @@ ul li {
 }
 
 .activitiesBackground {
-	width: 50%;
-	background-color: white;
+	width: 80%;
+	background-image:url("images/white-background.png");
 	padding: 25px;
-	opacity: 0.7;
 }
 
 .activityInList {
 	font-size: 1.5em;
+}
+
+.activityImage {
+	height: 200px;
+	width: 200px;
+	float: right;
+	display: block;
+}
+
+textarea {
+	resize: none;
+	display: block;
+	margin: 0 auto;
+}
+
+#activityTitle {
+	text-align: center;
+}
+
+#backButton {
+	height: 50px;
+	width: 50px;
 }
 
