@@ -79,15 +79,16 @@ textarea {
 }
 
 
-#backButton, #editButton {
+#backButton, #editButton, #saveButton {
 	height: 50px;
 	width: 50px;
 
 }
 
-#editButton {
+#editButton, #saveButton {
 	margin-left: 30px;
 }
+
 
 
 

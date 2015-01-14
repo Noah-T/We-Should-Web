@@ -63,39 +63,84 @@ function findActivities() {
 
 			$("li").click(function(){
 				var activityPath = myActivities[$(this).data("activityindex")];
-				if (myActivities[$(this).data("activityindex")].image !== undefined) {
-					var imagePath = myActivities[$(this).data("activityindex")].image.url();	
+				if (activityPath.image !== undefined) {
+					var imagePath = activityPath.image.url();	
 				};
-				
-				$(".activityList").empty();
-				$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
-				$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
-				$(".activityList").append("<li id='activityTitle' class='activityInList'>"+myActivities[$(this).data("activityindex")].name+ "</li>")
-				if (imagePath !== undefined) {
+					function showActivityHeader() {
+						$(".activityList").empty();
+						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
+						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
+						$(".activityList").append("<li id='activityTitle' class='activityInList'>"+activityPath.name+ "</li>");
+
+						$("#backButton").click(function(){
+							findActivities();
+						});
+						$("#editButton").click(function(){
+							beginEditingMode();
+						});
+					}
+					showActivityHeader();
+					
+				function showStaticActivityBody(){
+					if (imagePath !== undefined) {
 					$(".activityList").append("<img src='" + imagePath+"'class='activityImage'></img>");
-				};
-				$(".activityList").append("<li>" +(activityPath.creator || "") +"</li>" +
-										  "<li>" +(activityPath.link || "") +"</li>" +
-										  "<li>" +(activityPath.location || "")+"</li>" +
-										  "<li>" + (activityPath.phoneNumber || "")+"</li>" +
-										  "<textarea value='" + (activityPath.description || "") +"'></textarea>");
+					};
 
-				$("#editButton").click(function(){
-					$(".activityList").append("<input type=text value='" + (activityPath.creator || "") +"'></input>" +
-										  "<input type=text value='" + (activityPath.link || "") +"'></input>" +
-										  "<input type=text value='" + (activityPath.location || "") +"'></input>" +
-										  "<input type=text value='" + (activityPath.phoneNumber || "")+"'></input>" +
-										  "<textarea value='" + (activityPath.description || "") +"'></textarea>");
-
-				});
+					if (activityPath.creator) {$(".activityList").append("<li >" + "Created by: " + activityPath.creator +"</li>")};
+					if (activityPath.link) {$(".activityList").append("<li>" + activityPath.link + "</li>")};
+					if (activityPath.location) {$(".activityList").append("<li>" + activityPath.location + "</li")};
+					if (activityPath.phoneNumber) {$(".activityList").append("<li>" + activityPath.phoneNumber + "</li>")};
+					console.log(activityPath.description);
+					if (activityPath.description){$(".activityList").append("<textarea value=>" + activityPath.description+"</textarea>")};		
+				}
+				showStaticActivityBody();
 				
-				$("#backButton").click(function(){
-					findActivities();
-				});
+								  
+				
+				function beginEditingMode(){
+					showActivityHeader();
+					$("#editButton").remove();
+					$("#backButton").after("<img id='saveButton'src='images/save-icon.png'>");
+					$(".activityList").append("<input type=text value='" + "Created by: " + (activityPath.creator || "") +"'></input>" +
+										  "<input id='linkField' type=text placeholder='Link' value='" + (activityPath.link || "") +"'></input>" +
+										  "<input id='locationField' type=text placeholder='Location' value='" + (activityPath.location || "") +"'></input>" +
+										  "<input id='phoneNumberField' type=text placeholder='Phone Number'value='" + (activityPath.phoneNumber || "")+"'></input>" +
+										  "<textarea id='descriptionField' placeholder='Description'>"+ (activityPath.description || "")+ "</textarea>");
+					$("#saveButton").click(function(){
+						saveObjectToParse();
+						showActivityHeader();
+						showStaticActivityBody();
+					});
+				}		
+
+				function saveObjectToParse(){
+					console.log(activityPath.objectId);
+					var LocalActivity = Parse.Object.extend("Activity");
+					var localActivity = new LocalActivity();
+					localActivity.id = activityPath.objectId;
+					localActivity.set("linkField", $("#linkField").val());
+					localActivity.set("locationField", $("#locationField").val());
+					localActivity.set("phoneNumberField", $("#phoneNumberField").val());
+					localActivity.set("descriptionField", $("#descriptionField").val());
+					localActivity.save(null, { 
+						success: function(localActivity){
+							console.log("save successful");
+						}, 
+
+						error: function(localActivity, error){
+							console.log(error.description);
+					}});
+					
+
+				}	
+
+					$("#editButton").click(function(){
+						beginEditingMode();
+					});
 			});
 		},
 		error: function(error){
-			alert("Oops!" + error);
+			alert("Oops!" + error.toString());
 		}
 	});
 };
