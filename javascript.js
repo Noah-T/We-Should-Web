@@ -43,7 +43,7 @@ function findActivities() {
 	var activityQuery = new Parse.Query(activity);
 	activityQuery.find({
 		success: function(results){
-			console.log(results);
+
 			for (var i = 0; i < results.length; i++) {
 				var name = results[i].attributes.activityName;
 				var creator = results[i].attributes.activityCreator;
@@ -69,15 +69,25 @@ function findActivities() {
 				
 				$(".activityList").empty();
 				$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
+				$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
 				$(".activityList").append("<li id='activityTitle' class='activityInList'>"+myActivities[$(this).data("activityindex")].name+ "</li>")
 				if (imagePath !== undefined) {
 					$(".activityList").append("<img src='" + imagePath+"'class='activityImage'></img>");
 				};
-				$(".activityList").append("<input type=text value='" + (activityPath.creator || "") +"'></input>");
-				$(".activityList").append("<input type=text value='" + (activityPath.link || "") +"'></input>");
-				$(".activityList").append("<input type=text value='" + (activityPath.location || "") +"'></input>");
-				$(".activityList").append("<input type=text value='" + (activityPath.phoneNumber || "")+"'></input>");
-				$(".activityList").append("<textarea value='" + (activityPath.description || "") +"'></textarea>");
+				$(".activityList").append("<li>" +(activityPath.creator || "") +"</li>" +
+										  "<li>" +(activityPath.link || "") +"</li>" +
+										  "<li>" +(activityPath.location || "")+"</li>" +
+										  "<li>" + (activityPath.phoneNumber || "")+"</li>" +
+										  "<textarea value='" + (activityPath.description || "") +"'></textarea>");
+
+				$("#editButton").click(function(){
+					$(".activityList").append("<input type=text value='" + (activityPath.creator || "") +"'></input>" +
+										  "<input type=text value='" + (activityPath.link || "") +"'></input>" +
+										  "<input type=text value='" + (activityPath.location || "") +"'></input>" +
+										  "<input type=text value='" + (activityPath.phoneNumber || "")+"'></input>" +
+										  "<textarea value='" + (activityPath.description || "") +"'></textarea>");
+
+				});
 				
 				$("#backButton").click(function(){
 					findActivities();
@@ -90,8 +100,10 @@ function findActivities() {
 	});
 };
 
+				
 
 
-function showActivityDetail(activity){
-	console.log("You clicked on " + activity);
-}
+
+
+
+
