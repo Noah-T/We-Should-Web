@@ -33,6 +33,41 @@ $('#loginButton').click(function(event){
 
 });
 
+$("#signupButton").click(function(){
+	$("#loginButton").remove();
+	$("#noAccount").remove();
+	$("#signupButton").remove();
+	$("form").append("<input type='text' id='email' placeholder='Email'>");
+	$("form").append("<button id='createAccount'>Create Account</button>");
+
+	$("#createAccount").click(function(event){
+		//note that event.preventDefault() is necessary even when it's not explicityly labelled a submit button
+		event.preventDefault();
+		var name = $("#username").val();
+		var password = $("#password").val();
+		var email = $("#email").val();
+		console.log("name is: " + name + " password is: " + password + " email is: " + email);
+
+		var user = new Parse.User();
+		user.set("username", name);
+		user.set("password", password);
+		user.set("email", email);
+
+		user.signUp(null, {
+  success: function(user) {
+  	alert("Account successfully created!");
+  },
+  error: function(user, error) {
+
+    alert("Error: " + error.code + " " + error.message);
+  }
+});
+	});
+
+
+});
+
+
 function findActivities() {
 	myActivities = [];
 	$(".activityList").empty();
