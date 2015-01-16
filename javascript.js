@@ -11,6 +11,16 @@ this.phoneNumber = phoneNumber;
 this.image = image;
 
 };
+
+//can be used when logging out user 
+function loadLoginScreen(){
+	$(".activityList").remove();
+	$("#logoutButton").remove();
+
+	$(".formWrapper").append('<form><input type="text" placeholder="Username" id="username">' + 
+            '<input type="password" placeholder="Password" id="password">' +
+            '<input type="button" value="Log In" id="loginButton"></form>');
+}
 //alert("hey!");
 var myActivities = [];
 $('#loginButton').click(function(event){
@@ -21,6 +31,13 @@ $('#loginButton').click(function(event){
 	Parse.User.logIn(username, password, {
   success: function(user) {
     // Do stuff after successful login.
+    $("#signupButton").remove();
+    $("#noAccount").remove();
+    $("#mainPageTitle").before("<img id='logoutButton' src='images/logout.png'>");
+    $("#logoutButton").click(function(){
+    	Parse.User.logOut();
+    	loadLoginScreen();
+    });
 
     $("form").remove();
     findActivities();

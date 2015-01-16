@@ -85,13 +85,14 @@ textarea {
 }
 
 
-#backButton, #editButton, #saveButton {
+#backButton, #editButton, #saveButton, #logoutButton {
 	height: 50px;
 	width: 50px;
 
 }
 
-#editButton, #saveButton {
+
+#editButton, #saveButton, #logoutButton {
 	margin-left: 30px;
 }
 
