@@ -16,6 +16,7 @@ this.image = image;
 function loadLoginScreen(){
 	$(".activityList").remove();
 	$("#logoutButton").remove();
+	$("#addActivity").remove();
 
 	$(".formWrapper").append('<form><input type="text" placeholder="Username" id="username">' + 
             '<input type="password" placeholder="Password" id="password">' +
@@ -34,6 +35,8 @@ $('#loginButton').click(function(event){
     $("#signupButton").remove();
     $("#noAccount").remove();
     $("#mainPageTitle").before("<img id='logoutButton' src='images/logout.png'>");
+    $("#logoutButton").after("<img id='addActivity' src='images/add-icon.png'>");
+   
     $("#logoutButton").click(function(){
     	Parse.User.logOut();
     	loadLoginScreen();
@@ -67,6 +70,7 @@ $("#signupButton").click(function(){
 
 		var user = new Parse.User();
 		user.set("username", name);
+		user.set("lowercaseUsername", name.toLowerCase());
 		user.set("password", password);
 		user.set("email", email);
 
@@ -113,27 +117,61 @@ function findActivities() {
 			};
 			$(".activityList").addClass("activitiesBackground");
 
+			 $("#addActivity").click(function(){
+			 	createNewActivity();
+			 });
+
+			 function createNewActivity(){
+			 	var activityPath = new Activity("", Parse.User.current(), "", "", "", "", "", "");
+			 	$(".activityList").empty();
+						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
+						$(".activityList").append("<img id='saveButton' src='images/save-icon.png'>");
+						$(".activityList").append("<input id='activityTitle' placeholder='Activity Name' class='activityInList'>" +
+												  "<input id='linkField' type=text placeholder='Link'>" +
+										 		  "<input id='locationField' type=text placeholder='Location'>" +
+										 		  "<input id='phoneNumberField' type=text placeholder='Phone Number'>" +
+										  		  "<textarea id='descriptionField' placeholder='Description'></textarea>");
+				$("#saveButton").click(function(){
+					saveObjectToParse();
+					showActivityHeader();
+					showStaticActivityBody();
+				});
+						
+					$("#backButton").click(function(){
+						findActivities();
+					});
+			 }
+
+			 function saveObjectToParse(){
+					var LocalActivity = Parse.Object.extend("Activity");
+					var localActivity = new LocalActivity();
+					localActivity.id = activityPath.objectId;
+					localActivity.set("linkField", $("#linkField").val());
+					localActivity.set("locationField", $("#locationField").val());
+					localActivity.set("phoneNumberField", $("#phoneNumberField").val());
+					localActivity.set("descriptionField", $("#descriptionField").val());
+					localActivity.save(null, { 
+						success: function(localActivity){
+							console.log("save successful");
+						}, 
+
+						error: function(localActivity, error){
+							console.log(error.description);
+					}});
+				}	
+				
+				
+
 			$("li").click(function(){
 				var activityPath = myActivities[$(this).data("activityindex")];
-				if (activityPath.image !== undefined) {
-					var imagePath = activityPath.image.url();	
-				};
-					function showActivityHeader() {
-						$(".activityList").empty();
-						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
-						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
-						$(".activityList").append("<li id='activityTitle' class='activityInList'>"+activityPath.name+ "</li>");
-
-						$("#backButton").click(function(){
-							findActivities();
-						});
-						$("#editButton").click(function(){
-							beginEditingMode();
-						});
-					}
-					showActivityHeader();
-					
+						if (activityPath) {
+							if (activityPath.image !== undefined) {
+								var imagePath = activityPath.image.url();	
+							};	
+						};	
 				function showStaticActivityBody(){
+				
+				
 					if (imagePath !== undefined) {
 					$(".activityList").append("<img src='" + imagePath+"'class='activityImage'></img>");
 					};
@@ -145,10 +183,28 @@ function findActivities() {
 					console.log(activityPath.description);
 					if (activityPath.description){$(".activityList").append("<textarea value=>" + activityPath.description+"</textarea>")};		
 				}
-				showStaticActivityBody();
-				
-								  
-				
+
+				function showActivityHeader() {
+			 			
+
+						$(".activityList").empty();
+						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
+						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
+						if (typeof activityPath !== undefined) {
+							$(".activityList").append("<input id='activityTitle' class='activityInList'>"+ (activityPath.name || "") + "</li>");	
+						} else {
+							$(".activityList").append("<input id='activityTitle' placeholder='Activity Name' class='activityInList'>");	
+						}
+						
+
+						$("#backButton").click(function(){
+							findActivities();
+						});
+						$("#editButton").click(function(){
+							beginEditingMode();
+						});
+					}
+
 				function beginEditingMode(){
 					showActivityHeader();
 					$("#editButton").remove();
@@ -165,30 +221,15 @@ function findActivities() {
 					});
 				}		
 
-				function saveObjectToParse(){
-					console.log(activityPath.objectId);
-					var LocalActivity = Parse.Object.extend("Activity");
-					var localActivity = new LocalActivity();
-					localActivity.id = activityPath.objectId;
-					localActivity.set("linkField", $("#linkField").val());
-					localActivity.set("locationField", $("#locationField").val());
-					localActivity.set("phoneNumberField", $("#phoneNumberField").val());
-					localActivity.set("descriptionField", $("#descriptionField").val());
-					localActivity.save(null, { 
-						success: function(localActivity){
-							console.log("save successful");
-						}, 
-
-						error: function(localActivity, error){
-							console.log(error.description);
-					}});
-					
-
-				}	
-
+				
 					$("#editButton").click(function(){
 						beginEditingMode();
 					});
+				
+				showActivityHeader();
+				showStaticActivityBody();
+
+			
 			});
 		},
 		error: function(error){

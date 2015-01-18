@@ -85,7 +85,7 @@ textarea {
 }
 
 
-#backButton, #editButton, #saveButton, #logoutButton {
+#backButton, #editButton, #saveButton, #logoutButton, #addActivity {
 	height: 50px;
 	width: 50px;
 
