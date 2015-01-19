@@ -77,6 +77,9 @@ $("#signupButton").click(function(){
 		user.signUp(null, {
   success: function(user) {
   	alert("Account successfully created!");
+  	//remove the signup form
+  	$("form").remove();
+  	findActivities();
   },
   error: function(user, error) {
 
@@ -142,23 +145,7 @@ function findActivities() {
 					});
 			 }
 
-			 function saveObjectToParse(){
-					var LocalActivity = Parse.Object.extend("Activity");
-					var localActivity = new LocalActivity();
-					localActivity.id = activityPath.objectId;
-					localActivity.set("linkField", $("#linkField").val());
-					localActivity.set("locationField", $("#locationField").val());
-					localActivity.set("phoneNumberField", $("#phoneNumberField").val());
-					localActivity.set("descriptionField", $("#descriptionField").val());
-					localActivity.save(null, { 
-						success: function(localActivity){
-							console.log("save successful");
-						}, 
-
-						error: function(localActivity, error){
-							console.log(error.description);
-					}});
-				}	
+			 
 				
 				
 
@@ -219,7 +206,24 @@ function findActivities() {
 						showActivityHeader();
 						showStaticActivityBody();
 					});
-				}		
+				}
+				function saveObjectToParse(){
+					var LocalActivity = Parse.Object.extend("Activity");
+					var localActivity = new LocalActivity();
+					localActivity.id = activityPath.objectId;
+					localActivity.set("linkField", $("#linkField").val());
+					localActivity.set("locationField", $("#locationField").val());
+					localActivity.set("phoneNumberField", $("#phoneNumberField").val());
+					localActivity.set("descriptionField", $("#descriptionField").val());
+					localActivity.save(null, { 
+						success: function(localActivity){
+							console.log("save successful");
+						}, 
+
+						error: function(localActivity, error){
+							console.log(error.description);
+					}});
+				}			
 
 				
 					$("#editButton").click(function(){
