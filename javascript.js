@@ -149,7 +149,21 @@ function findActivities() {
 					parseActivity.set("descriptionField", $("#descriptionField").val());
 					parseActivity.save(null, { 
 						success: function(parseActivity){
+							debugger;
 							console.log("save successful");
+							$(".activityList").empty();
+							$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>" + 
+													   "<img id='editButton' src='images/edit-icon.png'>" +
+													   "<li>Created By: "+ parseActivity.attributes.activityCreator +"</li>" +
+													   "<li>"+ parseActivity.attributes.activityName +"</li>" +
+													   "<li>"+ parseActivity.attributes.linkField +"</li>" +
+													   "<li>"+ parseActivity.attributes.locationField +"</li>" +
+													   "<li>"+ parseActivity.attributes.phoneNumberField +"</li>" +
+													   "<li>"+ parseActivity.attributes.descriptionField +"</li>");
+							$("#backButton").click(function(){
+								findActivities();
+							});
+
 						}, 
 
 						error: function(parseActivity, error){
@@ -193,8 +207,9 @@ function findActivities() {
 				}
 
 				function showActivityHeader() {
+
 			 			
-			 				$(".activityList").empty();
+			 			$(".activityList").empty();
 						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
 						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
 						if (typeof activityPath !== undefined) {
