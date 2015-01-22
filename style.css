@@ -85,14 +85,14 @@ textarea {
 }
 
 
-#backButton, #editButton, #saveButton, #logoutButton, #addActivity, #deleteButton {
+#backButton, #editButton, #saveButton, #logoutButton, #addActivity, #deleteButton, #friendButton  {
 	height: 50px;
 	width: 50px;
 
 }
 
 
-#editButton, #saveButton, #logoutButton, #deleteButton {
+#editButton, #saveButton, #logoutButton, #deleteButton, #addActivity, #friendButton {
 	margin-left: 30px;
 }
 

@@ -36,10 +36,16 @@ $('#loginButton').click(function(event){
     $("#noAccount").remove();
     $("#mainPageTitle").before("<img id='logoutButton' src='images/logout.png'>");
     $("#logoutButton").after("<img id='addActivity' src='images/add-icon.png'>");
+    $("#addActivity").after("<img id='friendButton' src='images/friend-icon.png'>")
    
     $("#logoutButton").click(function(){
     	Parse.User.logOut();
     	loadLoginScreen();
+    });
+
+    $("#friendButton").click(function(){
+    	$(".activityList").empty();
+    	$(".activityList").append('<input placeholder="Enter a Friend\'s Name">');
     });
 
     $("form").remove();
