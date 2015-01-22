@@ -212,6 +212,7 @@ function findActivities() {
 			 			$(".activityList").empty();
 						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
 						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
+						$(".activityList").append("<img id='deleteButton' src='images/delete-icon.png'>")
 						if (typeof activityPath !== undefined) {
 							$(".activityList").append("<input id='activityTitle' class='activityInList'>"+ (activityPath.name || "") + "</li>");	
 						} else {
@@ -259,15 +260,42 @@ function findActivities() {
 						error: function(localActivity, error){
 							console.log(error.description);
 					}});
-				}			
+				}	
 
+				function deleteObjectFromParse(){
+					var ActivityToDelete = Parse.Object.extend("Activity");
+					var query = new Parse.Query(ActivityToDelete);
+					query.get(activityPath.objectId, {
+						success: function(activityToDelete){
+							activityToDelete.destroy({
+							  success: function(myObject) {
+							    // The object was deleted from the Parse Cloud.
+							    console.log("object deleted");
+							    findActivities();
+							  },
+							  error: function(myObject, error) {
+							    // The delete failed.
+							    console.log(error);
+							  }
+							});
+						}, 
+						error: function(object, error){
+							console.log(error);
+						}})
+
+				}		
+showActivityHeader();
+				showStaticActivityBody();
 				
 					$("#editButton").click(function(){
 						beginEditingMode();
 					});
+					
+					$("#deleteButton").click(function(){
+						console.log("click on delete detected");
+						deleteObjectFromParse();
+					});
 				
-				showActivityHeader();
-				showStaticActivityBody();
 
 			
 			});
