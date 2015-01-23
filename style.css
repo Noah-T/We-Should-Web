@@ -73,7 +73,7 @@ ul li {
 	display: block;
 }
 
-textarea {
+textarea, #findFriends {
 	resize: none;
 	display: block;
 	margin: 0 auto;

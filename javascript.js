@@ -45,7 +45,20 @@ $('#loginButton').click(function(event){
 
     $("#friendButton").click(function(){
     	$(".activityList").empty();
-    	$(".activityList").append('<input placeholder="Enter a Friend\'s Name">');
+    	$(".activityList").append('<input id="friendSearchTerm"placeholder="Enter a Friend\'s Name">' + 
+    							  '<button id="findFriends">Find Friends</button>'	
+    	);
+    	$("#findFriends").click(function(){
+    		var searchTerm = $("#friendSearchTerm").val();
+    		var query = new Parse.Query(Parse.User);
+    		query.equalTo("lowercaseUsername", searchTerm.toLowerCase());
+    		query.find({success: function(users){
+    			console.log(users);
+    			for (var i = 0; i < users.length; i++) {
+    				$(".activityList").append("<li>" + users[i].attributes.username+"</li>");
+    			};
+    		}})
+    	});
     });
 
     $("form").remove();
