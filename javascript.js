@@ -48,17 +48,25 @@ $('#loginButton').click(function(event){
     	$(".activityList").append('<input id="friendSearchTerm"placeholder="Enter a Friend\'s Name">' + 
     							  '<button id="findFriends">Find Friends</button>'	
     	);
+    	
     	$("#findFriends").click(function(){
+    		
     		var searchTerm = $("#friendSearchTerm").val();
     		var query = new Parse.Query(Parse.User);
     		query.equalTo("lowercaseUsername", searchTerm.toLowerCase());
     		query.find({success: function(users){
+    			$(".activityList").empty();
     			console.log(users);
     			for (var i = 0; i < users.length; i++) {
-    				$(".activityList").append("<li>" + users[i].attributes.username+"</li>");
+    				$(".activityList").append("<li class='friendResult'>" + users[i].attributes.username+"<img src='images/add-friend-icon.png' class='addFriend'></li>");
     			};
-    		}})
+    			var friendRequest = Parse.Object.extend("friendRequest");
+    			friendRequest.set("from", Parse.User.current());
+    			//friendRequest.set("to", )
+    		}
+    		});
     	});
+    
     });
 
     $("form").remove();

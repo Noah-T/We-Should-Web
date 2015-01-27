@@ -96,6 +96,18 @@ textarea, #findFriends {
 	margin-left: 30px;
 }
 
+.addFriend {
+	float: right;
+	height: 45px;
+	width: 45px;
+	padding-bottom: 10px;
+}
+
+.friendResult {
+	height: 50px;
+	line-height: 40px;
+}
+
 
 
 
