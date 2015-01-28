@@ -56,13 +56,28 @@ $('#loginButton').click(function(event){
     		query.equalTo("lowercaseUsername", searchTerm.toLowerCase());
     		query.find({success: function(users){
     			$(".activityList").empty();
-    			console.log(users);
+
+    			console.log("here are the users" + users);
     			for (var i = 0; i < users.length; i++) {
-    				$(".activityList").append("<li class='friendResult'>" + users[i].attributes.username+"<img src='images/add-friend-icon.png' class='addFriend'></li>");
+    				$(".activityList").append("<li class='friendResult'>" + users[i].attributes.username+"<img src='images/add-friend-icon.png' class='addFriend' data-user_to_add='"+ users[i].id+"'></li>");
     			};
-    			var friendRequest = Parse.Object.extend("friendRequest");
-    			friendRequest.set("from", Parse.User.current());
-    			//friendRequest.set("to", )
+    			$(".addFriend").click(function(){
+    				var FriendRequest = Parse.Object.extend("friendRequest");
+	    			var friendRequest = new FriendRequest();
+	    			friendRequest.set("from", Parse.User.current());
+	    			friendRequest.set("to", $(this).data("user_to_add"));
+	    			friendRequest.set("status", "pending");
+	    			friendRequest.save(null, {
+    					success: function(){
+    					console.log("request saved");
+    				},
+    					error: function(error){
+    					console.log(error);
+    				}
+    			});	
+    			});
+    			
+
     		}
     		});
     	});
@@ -322,9 +337,7 @@ showActivityHeader();
 						console.log("click on delete detected");
 						deleteObjectFromParse();
 					});
-				
 
-			
 			});
 		},
 		error: function(error){
