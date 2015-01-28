@@ -122,6 +122,9 @@ $("#signupButton").click(function(){
   	//remove the signup form
   	$("form").remove();
   	findActivities();
+  	var showActivityHeader = findActivities("showActivityHeader");
+  	debugger;
+  	showActivityHeader();
   },
   error: function(user, error) {
 
@@ -134,7 +137,7 @@ $("#signupButton").click(function(){
 });
 
 
-function findActivities() {
+function findActivities(functionRequest) {
 	myActivities = [];
 	$(".activityList").empty();
 	if($("#idButton") !== undefined){
@@ -344,6 +347,35 @@ showActivityHeader();
 			alert("Oops!" + error.toString());
 		}
 	});
+
+	if (functionRequest === "showActivityHeader") {
+		return function showActivityHeader() {
+
+			 			
+			 			$(".activityList").empty();
+						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
+						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
+						$(".activityList").append("<img id='deleteButton' src='images/delete-icon.png'>")
+						
+						if ((typeof activityPath !== "null") && (typeof activityPath !== "undefined")) {
+							if (typeof activityPath !== "undefined") {
+							$(".activityList").append("<input id='activityTitle' class='activityInList'>"+ (activityPath.name || "") + "</li>");	
+						} else {
+							$(".activityList").append("<input id='activityTitle' placeholder='Activity Name' class='activityInList'>");	
+						}	
+						};
+						
+						
+
+						$("#backButton").click(function(){
+							findActivities();
+						});
+						$("#editButton").click(function(){
+							beginEditingMode();
+						});
+			 			
+					};
+	};
 };
 
 				
