@@ -53,19 +53,20 @@ $('#loginButton').click(function(event){
     		
     		var searchTerm = $("#friendSearchTerm").val();
     		var query = new Parse.Query(Parse.User);
-    		query.equalTo("lowercaseUsername", searchTerm.toLowerCase());
+    		query.contains("lowercaseUsername", searchTerm.toLowerCase());
     		query.find({success: function(users){
     			$(".activityList").empty();
+    			debugger;
 
     			console.log("here are the users" + users);
     			for (var i = 0; i < users.length; i++) {
-    				$(".activityList").append("<li class='friendResult'>" + users[i].attributes.username+"<img src='images/add-friend-icon.png' class='addFriend' data-user_to_add='"+ users[i].id+"'></li>");
+    				$(".activityList").append("<li class='friendResult'>" + users[i].attributes.username+"<img src='images/add-friend-icon.png' class='addFriend' data-user_index='"+ i +"'></li>");
     			};
     			$(".addFriend").click(function(){
-    				var FriendRequest = Parse.Object.extend("friendRequest");
+    				var FriendRequest = Parse.Object.extend("FriendRequest");
 	    			var friendRequest = new FriendRequest();
 	    			friendRequest.set("from", Parse.User.current());
-	    			friendRequest.set("to", $(this).data("user_to_add"));
+	    			friendRequest.set("to", users[$(this).data("user_index")]);
 	    			friendRequest.set("status", "pending");
 	    			friendRequest.save(null, {
     					success: function(){
