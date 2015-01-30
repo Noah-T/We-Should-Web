@@ -65,12 +65,25 @@ $('#loginButton').click(function(event){
     			$(".addFriend").click(function(){
     				var FriendRequest = Parse.Object.extend("FriendRequest");
 	    			var friendRequest = new FriendRequest();
+	    			var userIndex = $(this).data("user_index");
+	    			var userAtIndex = users[$(this).data("user_index")];
 	    			friendRequest.set("from", Parse.User.current());
-	    			friendRequest.set("to", users[$(this).data("user_index")]);
+	    			friendRequest.set("to", userAtIndex);
 	    			friendRequest.set("status", "pending");
+
+
+
+
+	    			debugger;
 	    			friendRequest.save(null, {
     					success: function(){
     					console.log("request saved");
+    					console.log("this has a value of: " + $(this));
+    					var imageForRequest = $("ul").find("[data-user_index=\"" + userIndex + "\"]");
+    					$(imageForRequest).replaceWith("<h4 class='friendRequestSent'>Request Sent</h4>");
+
+    					debugger;
+
     				},
     					error: function(error){
     					console.log(error);
@@ -124,7 +137,7 @@ $("#signupButton").click(function(){
   	$("form").remove();
   	findActivities();
   	var showActivityHeader = findActivities("showActivityHeader");
-  	debugger;
+
   	showActivityHeader();
   },
   error: function(user, error) {
