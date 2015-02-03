@@ -44,7 +44,9 @@ $('#loginButton').click(function(event){
     });
 
     $("#friendButton").click(function(){
+
     	$(".activityList").empty();
+    	$(".activityList").append("<div><h1>Your Friends</h1></div>");
     	$(".activityList").append('<input id="friendSearchTerm"placeholder="Enter a Friend\'s Name">' + 
     							  '<button id="findFriends">Find Friends</button>'	
     	);
@@ -56,9 +58,11 @@ $('#loginButton').click(function(event){
     		query.contains("lowercaseUsername", searchTerm.toLowerCase());
     		query.find({success: function(users){
     			$(".activityList").empty();
-    			debugger;
+    			$(".activityList").append("<div><h3>Your Friends</h3></div>");
+    			$(".activityList").append('<input id="friendSearchTerm"placeholder="Enter a Friend\'s Name">' + 
+    							  '<button id="findFriends">Find Friends</button>'	
+    			);
 
-    			console.log("here are the users" + users);
     			for (var i = 0; i < users.length; i++) {
     				$(".activityList").append("<li class='friendResult'>" + users[i].attributes.username+"<img src='images/add-friend-icon.png' class='addFriend' data-user_index='"+ i +"'></li>");
     			};
@@ -73,16 +77,12 @@ $('#loginButton').click(function(event){
 
 
 
-
-	    			debugger;
 	    			friendRequest.save(null, {
     					success: function(){
     					console.log("request saved");
     					console.log("this has a value of: " + $(this));
     					var imageForRequest = $("ul").find("[data-user_index=\"" + userIndex + "\"]");
     					$(imageForRequest).replaceWith("<h4 class='friendRequestSent'>Request Sent</h4>");
-
-    					debugger;
 
     				},
     					error: function(error){
