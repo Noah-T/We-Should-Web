@@ -46,7 +46,43 @@ $('#loginButton').click(function(event){
     $("#friendButton").click(function(){
 
     	$(".activityList").empty();
-    	$(".activityList").append("<div><h1>Your Friends</h1></div>");
+    	$(".activityList").append("<div id='existingFriends'><h1>Friend Requests</h1></div>");
+    	//find pending requests send to the current user
+    	var FriendRequest = Parse.Object.extend("FriendRequest");
+    	var query = new Parse.Query(FriendRequest);
+    	query.equalTo("to", Parse.User.current());
+    	query.equalTo("status", "pending");
+    	query.find({
+    		success:function(requests){
+    			for (var i = 0; i < requests.length; i++) {
+    				var query = new Parse.Query(Parse.User);
+    				query.equalTo("objectId", requests[i].attributes.from.id);
+    				query.find(
+    					{
+    						success:function(objectRequests){
+    							console.log("success!");
+    							debugger;
+    							for (var j = 0; j < objectRequests.length; j++) {
+    								var pendingFriendResult = objectRequests[j].attributes.username;
+    								$("#existingFriends").append("<li data-requestindex='"+ j +"'>" + pendingFriendResult  + "</li>");
+    							};
+    							
+    						}, 
+    						error: function(){
+    							console.log("Oops...!");
+
+    						}
+    				});
+    				
+    				//add ability to accept friend requests
+    			};
+
+    		}, error:function(){
+
+    		}
+    	});
+
+
     	$(".activityList").append('<input id="friendSearchTerm"placeholder="Enter a Friend\'s Name">' + 
     							  '<button id="findFriends">Find Friends</button>'	
     	);
@@ -239,10 +275,6 @@ function findActivities(functionRequest) {
 				});
 			 }
 
-			 
-				
-				
-
 			$("li").click(function(){
 				 activityPath = myActivities[$(this).data("activityindex")];
 						if (activityPath) {
@@ -365,7 +397,6 @@ showActivityHeader();
 	if (functionRequest === "showActivityHeader") {
 		return function showActivityHeader() {
 
-			 			
 			 			$(".activityList").empty();
 						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
 						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
@@ -379,8 +410,6 @@ showActivityHeader();
 						}	
 						};
 						
-						
-
 						$("#backButton").click(function(){
 							findActivities();
 						});
