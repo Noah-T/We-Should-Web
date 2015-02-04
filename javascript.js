@@ -59,14 +59,29 @@ $('#loginButton').click(function(event){
     				query.equalTo("objectId", requests[i].attributes.from.id);
     				query.find(
     					{
+
     						success:function(objectRequests){
-    							console.log("success!");
-    							debugger;
+    							console.log(requests);
+    							console.log(objectRequests);
+
     							for (var j = 0; j < objectRequests.length; j++) {
     								var pendingFriendResult = objectRequests[j].attributes.username;
-    								$("#existingFriends").append("<li data-requestindex='"+ j +"'>" + pendingFriendResult  + "</li>");
+    								$("#existingFriends").append("<li class='friendRequestResult'data-requestindex='" + j +"'>" + 
+    									pendingFriendResult  + "<img src='images/green-check.png' class='acceptRequest'>" + 
+    									"<img src='images/red-x.png' class='declineRequest'>" +
+    									"</li>");
     							};
-    							
+
+    							$(".acceptRequest").click(function(){
+    								console.log("accept friend request clicked");
+    								debugger;
+    								$(this).data();
+
+    							});
+
+    							$(".declineRequest").click(function(){
+    								console.log("no, I don't want no scrubs. A scrub is a guy who can't get no love from me.");
+    							});
     						}, 
     						error: function(){
     							console.log("Oops...!");
