@@ -50,6 +50,7 @@ $('#loginButton').click(function(event){
     	//find pending requests send to the current user
     	var FriendRequest = Parse.Object.extend("FriendRequest");
     	var query = new Parse.Query(FriendRequest);
+    	var friendsWhoSentRequests;
     	query.equalTo("to", Parse.User.current());
     	query.equalTo("status", "pending");
     	query.find({
@@ -63,6 +64,7 @@ $('#loginButton').click(function(event){
     						success:function(objectRequests){
     							console.log(requests);
     							console.log(objectRequests);
+    							friendsWhoSentRequests = objectRequests;
 
     							for (var j = 0; j < objectRequests.length; j++) {
     								var pendingFriendResult = objectRequests[j].attributes.username;
@@ -74,8 +76,23 @@ $('#loginButton').click(function(event){
 
     							$(".acceptRequest").click(function(){
     								console.log("accept friend request clicked");
+    								//the request
+    								var thisRequestObject = requests[$(this).parent().data("requestindex")];
+    								var theId = thisRequestObject.get("objectId");
+    								//the user who sent the requests 
+    								var userWhoSentRequest = friendsWhoSentRequests[$(this).parent().data("requestindex")];
+
+    								Parse.Cloud.run("addFriendToFriendsRelation", {"friendRequest": thisRequestObject.id}, 
+    								{
+									  success: function(result) { 
+
+									  	console.log(result); },
+									  error: function(error) { 
+
+									  	console.log(error); }
+									});
     								debugger;
-    								$(this).data();
+
 
     							});
 
