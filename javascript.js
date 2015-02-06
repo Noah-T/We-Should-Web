@@ -85,13 +85,15 @@ $('#loginButton').click(function(event){
     								Parse.Cloud.run("addFriendToFriendsRelation", {"friendRequest": thisRequestObject.id}, 
     								{
 									  success: function(result) { 
-
+									  	var user = Parse.User.current();
+									  	var relation = user.relation("friendsRelation");
+									  	relation.add(userWhoSentRequest);
+									  	user.save();
 									  	console.log(result); },
 									  error: function(error) { 
 
 									  	console.log(error); }
 									});
-    								debugger;
 
 
     							});
