@@ -99,16 +99,16 @@ $('#loginButton').click(function(event){
     							});
 
     							$(".declineRequest").click(function(){
-    								console.log("no, I don't want no scrubs. A scrub is a guy who can't get no love from me.");
+    								//to do
     							});
     						}, 
-    						error: function(){
-    							console.log("Oops...!");
+    						error: function(error){
+    							console.log("Oops...! " + error);
 
     						}
     				});
     				
-    				//add ability to accept friend requests
+
     			};
 
     		}, error:function(){
@@ -120,6 +120,14 @@ $('#loginButton').click(function(event){
     	$(".activityList").append('<input id="friendSearchTerm"placeholder="Enter a Friend\'s Name">' + 
     							  '<button id="findFriends">Find Friends</button>'	
     	);
+
+    	$(".activityList").append("<h1 id='yourFriends'>Your Friends</h1>");
+
+    	var thisUser = Parse.User.current();
+    	var relation = thisUser.relation("friendsRelation");
+    	var query = relation.query("friendsRelation");
+    	query.find({success: function(response){ console.log("success"); debugger;}, error: function(){console.log("error")}});
+
     	
     	$("#findFriends").click(function(){
     		
