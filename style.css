@@ -128,7 +128,9 @@ textarea, #findFriends {
 	line-height: 40px;
 }
 
-
+#yourFriends {
+	margin-top: 20px;
+}
 
 
 

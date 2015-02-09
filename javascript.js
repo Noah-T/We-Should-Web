@@ -107,8 +107,6 @@ $('#loginButton').click(function(event){
 
     						}
     				});
-    				
-
     			};
 
     		}, error:function(){
@@ -126,7 +124,18 @@ $('#loginButton').click(function(event){
     	var thisUser = Parse.User.current();
     	var relation = thisUser.relation("friendsRelation");
     	var query = relation.query("friendsRelation");
-    	query.find({success: function(response){ console.log("success"); debugger;}, error: function(){console.log("error")}});
+    	query.find({
+    		success: function(response){ 
+    			console.log("success"); 
+    			for (var i = 0; i < response.length; i++) {
+    				$("#yourFriends").append("<li>"+response[i].attributes.username+"</li>");
+    			};
+
+    		}, 
+    		error: function(){
+    				console.log("error");
+    			}
+    	});
 
     	
     	$("#findFriends").click(function(){
@@ -286,7 +295,7 @@ function findActivities(functionRequest) {
 					parseActivity.set("descriptionField", $("#descriptionField").val());
 					parseActivity.save(null, { 
 						success: function(parseActivity){
-							debugger;
+
 							console.log("save successful");
 							$(".activityList").empty();
 							$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>" + 
