@@ -17,12 +17,31 @@ function loadLoginScreen(){
 	$(".activityList").remove();
 	$("#logoutButton").remove();
 	$("#addActivity").remove();
+	$("#friendButton").remove();
 
 	$(".formWrapper").append('<form><input type="text" placeholder="Username" id="username">' + 
             '<input type="password" placeholder="Password" id="password">' +
             '<input type="button" value="Log In" id="loginButton"></form>');
 }
-//alert("hey!");
+
+function findCurrentUsersFriends(){
+	var thisUser = Parse.User.current();
+    	var relation = thisUser.relation("friendsRelation");
+    	var query = relation.query("friendsRelation");
+    	query.find({
+    		success: function(response){ 
+    			console.log("success"); 
+    			for (var i = 0; i < response.length; i++) {
+    				$("#yourFriends").append("<li>"+response[i].attributes.username+"</li>");
+    			};
+
+    		}, 
+    		error: function(){
+    				console.log("error");
+    			}
+    	});
+}
+
 var myActivities = [];
 $('#loginButton').click(function(event){
 	
@@ -60,7 +79,6 @@ $('#loginButton').click(function(event){
     				query.equalTo("objectId", requests[i].attributes.from.id);
     				query.find(
     					{
-
     						success:function(objectRequests){
     							console.log(requests);
     							console.log(objectRequests);
@@ -104,7 +122,6 @@ $('#loginButton').click(function(event){
     						}, 
     						error: function(error){
     							console.log("Oops...! " + error);
-
     						}
     				});
     			};
@@ -317,8 +334,6 @@ function findActivities(functionRequest) {
 						}});
 				});			
 					
-				// showActivityHeader();
-				// showStaticActivityBody();
 
 						
 				$("#backButton").click(function(){
@@ -349,26 +364,30 @@ function findActivities(functionRequest) {
 				}
 
 				function showActivityHeader() {
-
 			 			
 			 			$(".activityList").empty();
-						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>");
-						$(".activityList").append("<img id='editButton' src='images/edit-icon.png'>");
-						$(".activityList").append("<img id='deleteButton' src='images/delete-icon.png'>")
+						$(".activityList").append("<img id='backButton' src='images/back-arrow.png'>" + 
+							"<img id='editButton' src='images/edit-icon.png'>" +
+							"<img id='inviteToActivity' src='images/add-friend-icon.png'>" +
+							"<img id='deleteButton' src='images/delete-icon.png'>");
 						if (typeof activityPath !== undefined) {
 							$(".activityList").append("<input id='activityTitle' class='activityInList'>"+ (activityPath.name || "") + "</li>");	
 						} else {
 							$(".activityList").append("<input id='activityTitle' placeholder='Activity Name' class='activityInList'>");	
 						}
 						
-
 						$("#backButton").click(function(){
 							findActivities();
 						});
 						$("#editButton").click(function(){
 							beginEditingMode();
 						});
-			 			
+						$("#inviteToActivity").click(function(){
+							$(".activityList").empty();
+							showActivityHeader();
+							$(".activityList").append("<h1 id='yourFriends'></h1>");
+							findCurrentUsersFriends();
+						});
 					}
 
 				function beginEditingMode(){
@@ -380,6 +399,11 @@ function findActivities(functionRequest) {
 										  "<input id='locationField' type=text placeholder='Location' value='" + (activityPath.location || "") +"'></input>" +
 										  "<input id='phoneNumberField' type=text placeholder='Phone Number'value='" + (activityPath.phoneNumber || "")+"'></input>" +
 										  "<textarea id='descriptionField' placeholder='Description'>"+ (activityPath.description || "")+ "</textarea>");
+					
+					$("#inviteToActivity").click(function(){
+						$(".activityList").empty();
+						showActivityHeader();
+					});
 					$("#saveButton").click(function(){
 						saveObjectToParse();
 						showActivityHeader();
@@ -426,7 +450,7 @@ function findActivities(functionRequest) {
 						}})
 
 				}		
-showActivityHeader();
+				showActivityHeader();
 				showStaticActivityBody();
 				
 					$("#editButton").click(function(){
@@ -437,7 +461,6 @@ showActivityHeader();
 						console.log("click on delete detected");
 						deleteObjectFromParse();
 					});
-
 			});
 		},
 		error: function(error){
@@ -467,7 +490,6 @@ showActivityHeader();
 						$("#editButton").click(function(){
 							beginEditingMode();
 						});
-			 			
 					};
 	};
 };
