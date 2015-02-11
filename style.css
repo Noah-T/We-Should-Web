@@ -85,14 +85,14 @@ textarea, #findFriends {
 }
 
 
-#backButton, #editButton, #saveButton, #logoutButton, #addActivity, #deleteButton, #friendButton, #inviteToActivity  {
+#backButton, #editButton, #saveButton, #logoutButton, #addActivity, #deleteButton, #friendButton, #inviteToActivity, #activities  {
 	height: 50px;
 	width: 50px;
 
 }
 
 
-#editButton, #saveButton, #logoutButton, #deleteButton, #addActivity, #friendButton, #inviteToActivity {
+#editButton, #saveButton, #logoutButton, #deleteButton, #addActivity, #friendButton, #inviteToActivity, #activities {
 	margin-left: 30px;
 }
 

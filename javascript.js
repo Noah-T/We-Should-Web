@@ -12,16 +12,24 @@ this.image = image;
 
 };
 
+if(!Parse.User.current()){
+	loadLoginScreen();
+}
+
+
 //can be used when logging out user 
 function loadLoginScreen(){
 	$(".activityList").remove();
 	$("#logoutButton").remove();
 	$("#addActivity").remove();
 	$("#friendButton").remove();
+	$("#activities").remove();
 
 	$(".formWrapper").append('<form><input type="text" placeholder="Username" id="username">' + 
             '<input type="password" placeholder="Password" id="password">' +
-            '<input type="button" value="Log In" id="loginButton"></form>');
+            '<input type="button" value="Log In" id="loginButton"></form>' +
+            	'<h2 id="noAccount">No account?</h2><button id="signupButton">Sign Up</button>'
+            );
 }
 
 function findCurrentUsersFriends(){
@@ -44,7 +52,6 @@ function findCurrentUsersFriends(){
 
 var myActivities = [];
 $('#loginButton').click(function(event){
-	
 	var username = $("#username").val();
 	var password = $("#password").val();
 
@@ -55,11 +62,19 @@ $('#loginButton').click(function(event){
     $("#noAccount").remove();
     $("#mainPageTitle").before("<img id='logoutButton' src='images/logout.png'>");
     $("#logoutButton").after("<img id='addActivity' src='images/add-icon.png'>");
-    $("#addActivity").after("<img id='friendButton' src='images/friend-icon.png'>")
+    $("#addActivity").after("<img id='friendButton' src='images/friend-icon.png'>");
+    $("#friendButton").after("<img id='activities' src='images/activities.png'>");
    
     $("#logoutButton").click(function(){
     	Parse.User.logOut();
     	loadLoginScreen();
+    });
+
+    $("#activities").click(function(){
+    	findActivities();
+    	$(".activityList").append("<h1>Hi!</h1>");
+    	var thisLength = $(".activityList").length;
+    	debugger;
     });
 
     $("#friendButton").click(function(){
@@ -179,8 +194,6 @@ $('#loginButton').click(function(event){
 	    			friendRequest.set("to", userAtIndex);
 	    			friendRequest.set("status", "pending");
 
-
-
 	    			friendRequest.save(null, {
     					success: function(){
     					console.log("request saved");
@@ -256,6 +269,8 @@ $("#signupButton").click(function(){
 
 
 function findActivities(functionRequest) {
+	console.log("inside of findActivities");
+	debugger;
 	myActivities = [];
 	$(".activityList").empty();
 	if($("#idButton") !== undefined){
@@ -493,6 +508,7 @@ function findActivities(functionRequest) {
 					};
 	};
 };
+
 
 				
 
