@@ -14,6 +14,8 @@ this.image = image;
 
 if(!Parse.User.current()){
 	loadLoginScreen();
+} else {
+	findActivities();
 }
 
 
@@ -64,7 +66,7 @@ $('#loginButton').click(function(event){
     $("#logoutButton").after("<img id='addActivity' src='images/add-icon.png'>");
     $("#addActivity").after("<img id='friendButton' src='images/friend-icon.png'>");
     $("#friendButton").after("<img id='activities' src='images/activities.png'>");
-   
+   findActivities();
     $("#logoutButton").click(function(){
     	Parse.User.logOut();
     	loadLoginScreen();
@@ -216,7 +218,9 @@ $('#loginButton').click(function(event){
     });
 
     $("form").remove();
+    debugger;
     findActivities();
+    console.log("We're past findActivities");
   },
   error: function(user, error) {
     // The login failed. Check error to see why.
@@ -270,7 +274,7 @@ $("#signupButton").click(function(){
 
 function findActivities(functionRequest) {
 	console.log("inside of findActivities");
-	debugger;
+
 	myActivities = [];
 	$(".activityList").empty();
 	if($("#idButton") !== undefined){
@@ -280,7 +284,7 @@ function findActivities(functionRequest) {
 	var activityQuery = new Parse.Query(activity);
 	activityQuery.find({
 		success: function(results){
-
+			console.log("here's a successful query");
 			for (var i = 0; i < results.length; i++) {
 				var name = results[i].attributes.activityName;
 				var creator = results[i].attributes.activityCreator;
@@ -293,9 +297,11 @@ function findActivities(functionRequest) {
 				var activity = new Activity(name, creator, link, objectId, description, location, phoneNumber,image);
 				myActivities.push(activity);
 			};
+			debugger;
 			for (var i = 0; i < myActivities.length; i++) {
 				$(".activityList").append("<li class='activityInList' data-activityindex='" + i+"'>"+myActivities[i].name+ "</li>"); 	
 			};
+			debugger; 
 			$(".activityList").addClass("activitiesBackground");
 
 			 $("#addActivity").click(function(){
